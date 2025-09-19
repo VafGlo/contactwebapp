@@ -1,0 +1,64 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  border-bottom: 1px solid #ddd;
+  background: #fff;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.circle {
+  width: 30px;
+  height: 30px;
+  background: #ccc;
+  border-radius: 50%;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: 20px;
+}
+
+.navLinks a {
+  text-decoration: none;
+  color: #444;
+  font-weight: 500;
+  padding-bottom: 4px;
+  transition: all 0.2s;
+}
+
+.active a {
+  color: #4CAF50;
+  border-bottom: 2px solid #4CAF50;
+}
+
+.newBtn {
+  background: #4CAF50;
+  color: white !important;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.favoriteBtn {
+  border-color: #e91e63;
+  color: #e91e63;
+}
+
+.deleteBtn {
+  border-color: #aaa;
+  color: #555;
+}
+
+.brokenHeartBtn {
+  border-color: #ff5722;
+  color: #ff5722;
+}
