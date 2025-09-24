@@ -10,14 +10,17 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
-.circle {
-  width: 30px;
-  height: 30px;
-  background: #ccc;
-  border-radius: 50%;
+.logoImg {
+  border-radius: 50%; 
+}
+
+.logo h2 {
+  font-size: 40px;
+  font-weight: bold;
+  margin: 0;
 }
 
 .navLinks {

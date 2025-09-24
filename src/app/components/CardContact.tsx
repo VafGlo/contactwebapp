@@ -19,8 +19,15 @@ export default function CardContact({
   onDelete,
 }: CardContactProps) {
   return (
+
     <div className={styles.card}>
-      <div className={styles.avatar}></div>
+    {/* Avatar con borde condicional */}
+      <div
+        className={`${styles.avatar} ${isFavorite ? styles.favoriteBorder : ""}`}
+      >
+        <img src="/contactLogo.png" alt={`${name} avatar`} />
+      </div>
+      
       <h3>{name}</h3>
       <p>{email}</p>
 

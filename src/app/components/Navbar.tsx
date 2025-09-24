@@ -2,6 +2,7 @@
 import Link from "next/link";
 import styles from "./Navbar.module.css";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -9,8 +10,13 @@ export default function Navbar() {
   return (
     <nav className={styles.navbar}>
       <div className={styles.logo}>
+          <Image
+          src="/contactLogo.png"
+          alt="Contact Logo"
+          width={60}
+          height={60}
+        />
         <span className={styles.circle}></span>
-        <h2>Contact app</h2>
       </div>
       <ul className={styles.navLinks}>
         <li className={pathname === "/" ? styles.active : ""}>

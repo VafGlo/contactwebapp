@@ -2,8 +2,8 @@ import CardContact from "./components/CardContact";
 import { contactsData } from "./data/contacts";
 
 export default function OverviewPage() {
-  const favorites = contactsData.filter((c) => c.favorite).slice(0, 5);
-  const others = contactsData.filter((c) => !c.favorite).slice(0, 15);
+  const favorites = contactsData.filter((c) => c.favorite).slice(0, 4);
+  const others = contactsData.filter((c) => !c.favorite).slice(0, 16);
 
   return (
     <div className="container">
