@@ -22,7 +22,7 @@
   align-items: center;
   justify-content: center;
   background-color: #f0f0f0;
-  border: 3px solid transparent; /* por defecto sin color */
+  border: 3px solid transparent; 
 }
 
 .avatar img {

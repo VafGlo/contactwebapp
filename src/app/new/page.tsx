@@ -22,7 +22,6 @@ export default function NewContactPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Nuevo contacto:", formData);
-    // Aquí después conectamos con contactsData
   };
 
   return (

@@ -21,7 +21,7 @@ export default function CardContact({
   return (
 
     <div className={styles.card}>
-    {/* Avatar con borde condicional */}
+
       <div
         className={`${styles.avatar} ${isFavorite ? styles.favoriteBorder : ""}`}
       >
