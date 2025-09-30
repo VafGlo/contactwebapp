@@ -74,7 +74,7 @@ export default function CardContact({
             )}
           </>
         ) : (
-          // En otras vistas, comportamiento si es favorito (REMOVE )
+          // Comportamiento (REMOVE) si es favorito y esta en overview
           <>
             {isFavorite ? (
               <button
@@ -85,7 +85,7 @@ export default function CardContact({
                 X REMOVE
               </button>
             ) : (
-              //Aca si esta en contacts que se muestre -> 💚 + 🗑️
+              //Comportamiento (Solo 💚) si es NO es favorito y esta en overview 
               <>
                 <button
                   className={styles.favoriteBtn}
@@ -93,13 +93,6 @@ export default function CardContact({
                   title="Añadir a favoritos"
                 >
                   💚
-                </button>
-                <button
-                  className={styles.deleteBtn}
-                  onClick={onDelete}
-                  title="Eliminar contacto"
-                >
-                  🗑️
                 </button>
               </>
             )}
