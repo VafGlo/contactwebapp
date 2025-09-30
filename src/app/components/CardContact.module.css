@@ -1,11 +1,12 @@
 .card {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  padding: 16px;
-  text-align: center;
-  width: 200px;
-  transition: transform 0.2s;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    text-align: center;
+    height: 100%;
+    transition: transform 0.2s;
+    box-sizing: border-box;
 }
 
 .card:hover {
@@ -50,11 +51,9 @@
   margin-top: 12px;
 }
 
-.favoriteBtn,
-.deleteBtn,
-.brokenHeartBtn {
+.favoriteBtn {
   background: white;
-  border: 1px solid #ccc;
+  border: 1px solid #C1D72F;
   border-radius: 8px;
   padding: 6px 12px;
   cursor: pointer;
@@ -62,17 +61,30 @@
   transition: all 0.2s;
 }
 
+.deleteBtn,
+.brokenHeartBtn {
+  background: white;
+  border: 1px solid #CF6679;
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+  color: #CF6679;
+}
+
 .favoriteBtn:hover {
-  color: #e91e63;
-  border-color: #e91e63;
+  background-color: #d5df93;
+  border-color: #C1D72F;
 }
 
 .deleteBtn:hover {
-  color: red;
-  border-color: red;
+  background-color: #CF6679;
+  border-color: #CF6679;
 }
 
 .brokenHeartBtn:hover {
   color: red;
-  border-color: red;
+  background-color: #CF6679;
+  border-color: #CF6679;
 }

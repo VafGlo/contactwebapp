@@ -10,7 +10,7 @@ export default function FavoritesPage() {
 
   // Configuración de paginación
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 16;
+  const itemsPerPage = 12;
 
   // Calcular el rango de contactos que se muestran
   const indexOfLast = currentPage * itemsPerPage;
@@ -36,22 +36,22 @@ export default function FavoritesPage() {
 
       {/* Controles de paginación */}
       <div className="pagination">
+        <span>
+          {currentPage} de {totalPages}
+        </span>
+
         <button
           disabled={currentPage === 1}
           onClick={() => setCurrentPage((p) => p - 1)}
         >
-          ⬅ 
+          ‹
         </button>
-
-        <span>
-          Page {currentPage} of {totalPages}
-        </span>
 
         <button
           disabled={currentPage === totalPages}
           onClick={() => setCurrentPage((p) => p + 1)}
         >
-            ➡
+          ›
         </button>
       </div>
     </div>

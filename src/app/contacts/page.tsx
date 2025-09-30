@@ -2,18 +2,17 @@
 import { useState } from "react";
 import CardContact from "../components/CardContact";
 import { contactsData } from "../data/contacts";
-import styles from "./Contacts.module.css";
 
 export default function ContactsPage() {
   const [currentPage, setCurrentPage] = useState(1);
-  const contactsPerPage = 15;
+  const contactsPerPage = 12;
 
   // Calcular rango
   const indexOfLast = currentPage * contactsPerPage;
   const indexOfFirst = indexOfLast - contactsPerPage;
   const currentContacts = contactsData.slice(indexOfFirst, indexOfLast);
 
-  // Total de páginas
+  //Total de paginas
   const totalPages = Math.ceil(contactsData.length / contactsPerPage);
 
   return (
@@ -28,28 +27,29 @@ export default function ContactsPage() {
             name={contact.name}
             email={contact.email}
             isFavorite={contact.favorite}
+            context="contacts" // Aca esta mirando que este en la vista de contactos
           />
         ))}
       </div>
 
       {/* Controles de paginación */}
-      <div className={styles.pagination}>
-        <button
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage((prev) => prev - 1)}
-        >
-          ⬅ 
-        </button>
-
+      <div className="pagination">
         <span>
-          Página {currentPage} de {totalPages}
+          {currentPage} de {totalPages}
         </span>
 
         <button
-          disabled={currentPage === totalPages}
-          onClick={() => setCurrentPage((prev) => prev + 1)}
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage((p) => p - 1)}
         >
-           ➡
+          ‹
+        </button>
+
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage((p) => p + 1)}
+        >
+          ›
         </button>
       </div>
     </div>

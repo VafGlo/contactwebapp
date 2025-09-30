@@ -8,6 +8,7 @@ type CardContactProps = {
   onAddFavorite?: () => void;
   onRemoveFavorite?: () => void;
   onDelete?: () => void;
+  context?: "contacts" | "overview" | "favorites"; // prop para saber en donde esta (vista)
 };
 
 export default function CardContact({
@@ -17,58 +18,95 @@ export default function CardContact({
   onAddFavorite,
   onRemoveFavorite,
   onDelete,
+  context = "overview",
 }: CardContactProps) {
   return (
-
     <div className={styles.card}>
-
       <div
         className={`${styles.avatar} ${isFavorite ? styles.favoriteBorder : ""}`}
       >
         <img src="/contactLogo.png" alt={`${name} avatar`} />
       </div>
-      
+
       <h3>{name}</h3>
       <p>{email}</p>
 
       <div className={styles.actions}>
-        {isFavorite ? (
+        {/*Lógica según página */}
+        {context === "contacts" ? (
           <>
-          <button
-            className={styles.brokenHeartBtn}
-            onClick={onRemoveFavorite}
-            title="Quitar de favoritos"
-          >
-            💔
-          </button>
-          <button
-              className={styles.deleteBtn}
-              onClick={onDelete}
-              title="Eliminar contacto"
-            >
-              🗑️
-            </button>
+            {isFavorite ? (
+              // Si ES favorito, estos botones -> ❌ + 🗑️ 
+              <>
+                <button
+                  className={styles.brokenHeartBtn}
+                  onClick={onRemoveFavorite}
+                  title="Quitar de favoritos"
+                >
+                  ❌
+                </button>
+                <button
+                  className={styles.deleteBtn}
+                  onClick={onDelete}
+                  title="Eliminar contacto"
+                >
+                  🗑️
+                </button>
+              </>
+            ) : (
+              // Si NO es favorito, estos botones -> 💚 + 🗑️ 
+              <>
+                <button
+                  className={styles.favoriteBtn}
+                  onClick={onAddFavorite}
+                  title="Añadir a favoritos"
+                >
+                  💚
+                </button>
+                <button
+                  className={styles.deleteBtn}
+                  onClick={onDelete}
+                  title="Eliminar contacto"
+                >
+                  🗑️
+                </button>
+              </>
+            )}
           </>
-          
         ) : (
+          // En otras vistas, comportamiento si es favorito (REMOVE )
           <>
-            <button
-              className={styles.favoriteBtn}
-              onClick={onAddFavorite}
-              title="Añadir a favoritos"
-            >
-              ❤️
-            </button>
-            <button
-              className={styles.deleteBtn}
-              onClick={onDelete}
-              title="Eliminar contacto"
-            >
-              🗑️
-            </button>
+            {isFavorite ? (
+              <button
+                className={styles.brokenHeartBtn}
+                onClick={onRemoveFavorite}
+                title="Quitar de favoritos"
+              >
+                X REMOVE
+              </button>
+            ) : (
+              //Aca si esta en contacts que se muestre -> 💚 + 🗑️
+              <>
+                <button
+                  className={styles.favoriteBtn}
+                  onClick={onAddFavorite}
+                  title="Añadir a favoritos"
+                >
+                  💚
+                </button>
+                <button
+                  className={styles.deleteBtn}
+                  onClick={onDelete}
+                  title="Eliminar contacto"
+                >
+                  🗑️
+                </button>
+              </>
+            )}
           </>
         )}
       </div>
     </div>
   );
 }
+
