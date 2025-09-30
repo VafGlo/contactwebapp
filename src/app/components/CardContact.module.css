@@ -56,16 +56,29 @@
   border: 1px solid #C1D72F;
   border-radius: 8px;
   padding: 6px 12px;
+  margin-right: 10px;
   cursor: pointer;
   font-size: 16px;
   transition: all 0.2s;
 }
 
-.deleteBtn,
+.deleteBtn {
+  background: white;
+  border: 1px solid #CF6679;
+  border-radius: 8px;
+  margin-left: 10px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+  color: #CF6679;
+}
+
 .brokenHeartBtn {
   background: white;
   border: 1px solid #CF6679;
   border-radius: 8px;
+  margin-right: 10px;
   padding: 6px 12px;
   cursor: pointer;
   font-size: 16px;
