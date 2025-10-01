@@ -6,7 +6,7 @@ export interface Contact {
 }
 
 export const contactsData: Contact[] = [
-    { id: 1, name: "John Doe", email: "john@example.com", favorite: true },
+  { id: 1, name: "John Doe", email: "john@example.com", favorite: true },
   { id: 2, name: "Jane Smith", email: "jane@example.com", favorite: false },
   { id: 3, name: "Carlos Pérez", email: "carlos@example.com", favorite: true },
   { id: 4, name: "Laura Torres", email: "laura@example.com", favorite: false },

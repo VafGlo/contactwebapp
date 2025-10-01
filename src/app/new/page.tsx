@@ -1,10 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { useContacts } from "../context/contactsContext";
 import styles from "./NewContactForm.module.css";
 
+// Definimos el tipo del formulario
+type FormData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  favorite: boolean;
+};
+
 export default function NewContactPage() {
-  const [formData, setFormData] = useState({
+  const { addContact } = useContacts();
+
+  const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
     email: "",
@@ -21,7 +32,23 @@ export default function NewContactPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Nuevo contacto:", formData);
+
+    // Construimos el objeto esperado por el context
+    const newContact = {
+      name: ${formData.firstName} ${formData.lastName}.trim(),
+      email: formData.email,
+      favorite: formData.favorite,
+    };
+
+    addContact(newContact);
+
+    // Limpiar el formulario
+    setFormData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      favorite: false,
+    });
   };
 
   return (
@@ -74,3 +101,80 @@ export default function NewContactPage() {
     </div>
   );
 }
+
+// "use client";
+
+// import { useState } from "react";
+// import styles from "./NewContactForm.module.css";
+
+// export default function NewContactPage() {
+//   const [formData, setFormData] = useState({
+//     firstName: "",
+//     lastName: "",
+//     email: "",
+//     favorite: false,
+//   });
+
+//   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     const { name, value, type, checked } = e.target;
+//     setFormData((prev) => ({
+//       ...prev,
+//       [name]: type === "checkbox" ? checked : value,
+//     }));
+//   };
+
+//   const handleSubmit = (e: React.FormEvent) => {
+//     e.preventDefault();
+//     console.log("Nuevo contacto:", formData);
+//   };
+
+//   return (
+//     <div className={styles.container}>
+//       <form onSubmit={handleSubmit} className={styles.form}>
+//         <div className={styles.inputGroup}>
+//           <input
+//             type="text"
+//             name="firstName"
+//             placeholder="First name"
+//             value={formData.firstName}
+//             onChange={handleChange}
+//             className={styles.input}
+//           />
+//         </div>
+//         <div className={styles.inputGroup}>
+//           <input
+//             type="text"
+//             name="lastName"
+//             placeholder="Last name"
+//             value={formData.lastName}
+//             onChange={handleChange}
+//             className={styles.input}
+//           />
+//         </div>
+//         <div className={styles.inputGroup}>
+//           <input
+//             type="email"
+//             name="email"
+//             placeholder="Email"
+//             value={formData.email}
+//             onChange={handleChange}
+//             className={styles.input}
+//           />
+//         </div>
+//         <div className={styles.checkboxGroup}>
+//           <label htmlFor="favorite">Enable like favorite</label>
+//           <input
+//             id="favorite"
+//             type="checkbox"
+//             name="favorite"
+//             checked={formData.favorite}
+//             onChange={handleChange}
+//           />
+//         </div>
+//         <button type="submit" className={styles.button}>
+//           SAVE
+//         </button>
+//       </form>
+//     </div>
+//   );
+// }
