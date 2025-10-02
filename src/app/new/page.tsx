@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { useContacts } from "../context/contactsContext";
 import styles from "./NewContactForm.module.css";
+import CardContact from "../components/CardContact";
 
-// Definimos el tipo del formulario
 type FormData = {
   firstName: string;
   lastName: string;
@@ -13,7 +13,7 @@ type FormData = {
 };
 
 export default function NewContactPage() {
-  const { addContact } = useContacts();
+  const { addContact, addFavorite, removeFavorite, deleteContact, contacts } = useContacts();
 
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
@@ -21,6 +21,9 @@ export default function NewContactPage() {
     email: "",
     favorite: false,
   });
+
+  // id del contacto recién creado (si existe)
+  const [createdId, setCreatedId] = useState<number | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -33,14 +36,28 @@ export default function NewContactPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validación básica
+    if (!formData.firstName.trim() && !formData.lastName.trim()) {
+      alert("Por favor ingresa al menos un nombre o apellido.");
+      return;
+    }
+    if (!formData.email.trim()) {
+      alert("Por favor ingresa un email válido.");
+      return;
+    }
+
     // Construimos el objeto esperado por el context
-    const newContact = {
-      name: ${formData.firstName} ${formData.lastName}.trim(),
-      email: formData.email,
+    const newContactData = {
+      name: `${formData.firstName} ${formData.lastName}`.trim(),
+      email: formData.email.trim(),
       favorite: formData.favorite,
     };
 
-    addContact(newContact);
+    // addContact ahora devuelve el contacto creado con id
+    const created = addContact(newContactData);
+
+    // Guardamos el id para mostrar la preview y permitir acciones
+    setCreatedId(created.id);
 
     // Limpiar el formulario
     setFormData({
@@ -49,6 +66,22 @@ export default function NewContactPage() {
       email: "",
       favorite: false,
     });
+  };
+
+  // Buscar el contacto creado en el estado global (se mantiene sincronizado)
+  const createdContact = createdId ? contacts.find((c) => c.id === createdId) ?? null : null;
+
+  // Helpers locales para que la preview actualice createdContact si cambia
+  const handlePreviewAddFavorite = (id: number) => {
+    addFavorite(id);
+  };
+  const handlePreviewRemoveFavorite = (id: number) => {
+    removeFavorite(id);
+  };
+  const handlePreviewDelete = (id: number) => {
+    deleteContact(id);
+    // quitar la preview si se elimina
+    setCreatedId(null);
   };
 
   return (
@@ -98,83 +131,26 @@ export default function NewContactPage() {
           SAVE
         </button>
       </form>
+
+      {/* Preview: muestra la card del contacto recién creado (si existe) */}
+      {createdContact && (
+        <section style={{ marginTop: 24 }}>
+          <h3>Contacto guardado exitosamente</h3>
+          <div style={{ display: "flex", gap: 16, marginTop: 12 }}>
+            <CardContact
+              name={createdContact.name}
+              email={createdContact.email}
+              isFavorite={createdContact.favorite}
+              context="contacts" // mostramos como en la vista de contacts (heart+trash)
+              onAddFavorite={() => handlePreviewAddFavorite(createdContact.id)}
+              onRemoveFavorite={() => handlePreviewRemoveFavorite(createdContact.id)}
+              onDelete={() => handlePreviewDelete(createdContact.id)}
+            />
+          </div>
+        </section>
+      )}
     </div>
   );
 }
 
-// "use client";
 
-// import { useState } from "react";
-// import styles from "./NewContactForm.module.css";
-
-// export default function NewContactPage() {
-//   const [formData, setFormData] = useState({
-//     firstName: "",
-//     lastName: "",
-//     email: "",
-//     favorite: false,
-//   });
-
-//   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const { name, value, type, checked } = e.target;
-//     setFormData((prev) => ({
-//       ...prev,
-//       [name]: type === "checkbox" ? checked : value,
-//     }));
-//   };
-
-//   const handleSubmit = (e: React.FormEvent) => {
-//     e.preventDefault();
-//     console.log("Nuevo contacto:", formData);
-//   };
-
-//   return (
-//     <div className={styles.container}>
-//       <form onSubmit={handleSubmit} className={styles.form}>
-//         <div className={styles.inputGroup}>
-//           <input
-//             type="text"
-//             name="firstName"
-//             placeholder="First name"
-//             value={formData.firstName}
-//             onChange={handleChange}
-//             className={styles.input}
-//           />
-//         </div>
-//         <div className={styles.inputGroup}>
-//           <input
-//             type="text"
-//             name="lastName"
-//             placeholder="Last name"
-//             value={formData.lastName}
-//             onChange={handleChange}
-//             className={styles.input}
-//           />
-//         </div>
-//         <div className={styles.inputGroup}>
-//           <input
-//             type="email"
-//             name="email"
-//             placeholder="Email"
-//             value={formData.email}
-//             onChange={handleChange}
-//             className={styles.input}
-//           />
-//         </div>
-//         <div className={styles.checkboxGroup}>
-//           <label htmlFor="favorite">Enable like favorite</label>
-//           <input
-//             id="favorite"
-//             type="checkbox"
-//             name="favorite"
-//             checked={formData.favorite}
-//             onChange={handleChange}
-//           />
-//         </div>
-//         <button type="submit" className={styles.button}>
-//           SAVE
-//         </button>
-//       </form>
-//     </div>
-//   );
-// }
