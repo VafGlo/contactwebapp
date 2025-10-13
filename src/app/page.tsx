@@ -1,7 +1,7 @@
 "use client";
 
-import CardContact from "./components/CardContact";
-import { useContacts } from "./context/contactsContext";
+import CardContact from "../components/CardContact";
+import { useContacts } from "../context/contactsContext";
 
 export default function OverviewPage() {
   const { contacts, addFavorite, removeFavorite, deleteContact } = useContacts();

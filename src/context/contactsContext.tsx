@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
-import { contactsData } from "../data/contacts";
+import { contactsData } from "@/data/contacts";
 
 // Definición del tipo de contacto
 export type Contact = {

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import CardContact from "../components/CardContact";
-import { useContacts } from "../context/contactsContext";
+import CardContact from "../../components/CardContact";
+import { useContacts } from "../../context/contactsContext";
 
 export default function ContactsPage() {
   const { contacts, addFavorite, removeFavorite, deleteContact } = useContacts();

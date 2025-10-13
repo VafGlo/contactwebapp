@@ -1,0 +1,13 @@
+.card-inline-grid {
+    gap: 30px;
+    display: flex;
+    overflow: hidden;
+    overflow-x: auto;
+    padding-block-end: 2rem;
+    padding-inline-end: 0.3rem;
+    padding-inline-start: 0.2rem;
+
+    & > * {
+        flex: 0 0 270px;
+    }
+}
