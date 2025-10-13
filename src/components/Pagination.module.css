@@ -1,0 +1,41 @@
+.pagination {
+  display: flex;
+  justify-content: flex-end; /* alinea la paginación a la derecha */
+  align-items: center;
+  gap: 8px;
+  margin-top: 32px;
+  color: #222;
+  font-size: 14px;
+}
+
+.pageInfo {
+  color: #666;
+  font-weight: 500;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pageButton {
+  border: none;
+  background: transparent;
+  color: #333;
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.2s ease;
+}
+
+.pageButton:hover:not(:disabled) {
+  background: #f3f3f3;
+}
+
+.pageButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
