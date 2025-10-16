@@ -37,6 +37,7 @@ export default function NewContactPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validación básica
     if (!formData.firstName.trim() && !formData.lastName.trim()) {
       alert("Por favor ingresa al menos un nombre o apellido.");
       return;
@@ -46,15 +47,20 @@ export default function NewContactPage() {
       return;
     }
 
+    // Construimos el objeto esperado por el context
     const newContactData = {
       name: `${formData.firstName} ${formData.lastName}`.trim(),
       email: formData.email.trim(),
       favorite: formData.favorite,
     };
 
+    // addContact ahora devuelve el contacto creado con id
     const created = addContact(newContactData);
-    setCreatedId(created.id); // 👈 lo guardamos para mostrar preview
 
+    //Guardamos el id para mostrar la preview y permitir acciones
+    setCreatedId(created.id);
+
+    //Limpiar el formulario
     setFormData({
       firstName: "",
       lastName: "",
@@ -63,8 +69,10 @@ export default function NewContactPage() {
     });
   };
 
+  // Buscar el contacto creado en el estado global (se mantiene sincronizado)
   const createdContact = createdId ? contacts.find((c) => c.id === createdId) ?? null : null;
 
+  // Helpers locales para que la preview actualice createdContact si cambia
   const handlePreviewAddFavorite = (id: number) => {
     addFavorite(id);
   };
@@ -73,7 +81,7 @@ export default function NewContactPage() {
   };
   const handlePreviewDelete = (id: number) => {
     deleteContact(id);
-    setCreatedId(null); // 👈 si se elimina, cerramos modal
+    setCreatedId(null); // si se elimina, cerramos modal
   };
 
   return (

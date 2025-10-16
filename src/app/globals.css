@@ -4,6 +4,10 @@ html, body {
   font-family: sans-serif; 
 }
 
+* {
+    box-sizing: border-box;
+}
+
 /* Títulos de sección con línea verde */
 .section-title {
   border-bottom: 2px solid #8bc34a;
@@ -11,6 +15,10 @@ html, body {
   margin-bottom: 16px;
   font-size: 18px;
   font-weight: 600;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 5;
 }
 
 /* Grid para organizar las cards */

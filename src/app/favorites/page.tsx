@@ -15,11 +15,22 @@ export default function FavoritesPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
+  const totalPages = Math.max(1, Math.ceil(favoriteContacts.length / itemsPerPage));
   const indexOfLast = currentPage * itemsPerPage;
   const indexOfFirst = indexOfLast - itemsPerPage;
   const currentContacts = favoriteContacts.slice(indexOfFirst, indexOfLast);
 
-  const totalPages = Math.ceil(favoriteContacts.length / itemsPerPage);
+    //Evita avanzar o retroceder fuera del rango
+  const handleNext = () => {
+    setCurrentPage((p) => Math.min(p + 1, totalPages));
+  };
+
+  const handlePrev = () => {
+    setCurrentPage((p) => Math.max(p - 1, 1));
+  };
+
+  // Si cambian los contactos y la página actual queda fuera de rango, la reiniciamos
+  if (currentPage > totalPages) setCurrentPage(totalPages);
 
   return (
     <div className="container">

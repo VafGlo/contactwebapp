@@ -1,8 +1,9 @@
-import { redirect } from "next/navigation";
+"use client";
 
-export default function HomeRedirect() {
-  // Redirige automáticamente al usuario a /overview
-  redirect("/overview");
+import OverviewPage from "./overview/page";
+
+export default function Index() {
+  return <OverviewPage />;
 }
 
 
