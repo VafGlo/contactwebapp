@@ -33,30 +33,46 @@ export default function FavoritesPage() {
   if (currentPage > totalPages) setCurrentPage(totalPages);
 
   return (
-    <div className="container">
+   <div className="container">
       <h2 className="section-title">Favorite Contacts</h2>
 
-      <div className="card-grid">
-        {currentContacts.map((contact) => (
-          <CardContact
-            key={contact.id}
-            name={contact.name}
-            email={contact.email}
-            isFavorite={contact.favorite}
-            context="favorites"
-            onRemoveFavorite={() => removeFavorite(contact.id)}
-            onDelete={() => deleteContact(contact.id)}
-          />
-        ))}
-      </div>
+      {/* ✅ Si no hay favoritos */}
+      {favoriteContacts.length === 0 ? (
+        <p style={{ textAlign: "center", marginTop: "2rem", color: "#555" }}>
+          You don’t have any favorite contacts yet
+        </p>
+      ) : (
+        <>
+          {/* Lista de favoritos */}
+          <div className="card-grid">
+            {currentContacts.length > 0 ? (
+              currentContacts.map((contact) => (
+                <CardContact
+                  key={contact.id}
+                  name={contact.name}
+                  email={contact.email}
+                  isFavorite={contact.favorite}
+                  context="favorites"
+                  onRemoveFavorite={() => removeFavorite(contact.id)}
+                  onDelete={() => deleteContact(contact.id)}
+                />
+              ))
+            ) : (
+              <p style={{ textAlign: "center", marginTop: "2rem", color: "#555" }}>
+                No more contacts to display on this page.
+              </p>
+            )}
+          </div>
 
-      {/* Paginación */}
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPrev={() => setCurrentPage((p) => p - 1)}
-          onNext={() => setCurrentPage((p) => p + 1)}
-        />
+          {/* Paginación */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPrev={handlePrev}
+            onNext={handleNext}
+          />
+        </>
+      )}
     </div>
   );
 }
