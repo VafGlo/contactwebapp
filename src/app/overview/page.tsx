@@ -9,7 +9,7 @@ export default function OverviewPage() {
     useContacts();
 
   const favorites = contacts.filter((c) => c.favorite).slice(0, 4);
-  const others = contacts.filter((c) => !c.favorite).slice(0, 16);
+  const others = contacts.filter((c) => !c.favorite).slice(0, 12);
 
   return (
     <div className="container">
