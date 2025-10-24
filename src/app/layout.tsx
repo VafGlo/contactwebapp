@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/Navbar";
-import { ContactsProvider } from "../context/contactsContext";
+import { AuthProvider } from "@/context/authContext";
+import { ContactsProvider } from "@/context/contactsContext";
 
 export const metadata: Metadata = {
   title: "WebUI Project",
@@ -14,12 +15,14 @@ export default function RootLayout({
 }: { children: React.ReactNode; 
 }) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body>
-        <ContactsProvider>
-          <Navbar />
-          <main style={{ padding: "20px" }}>{children}</main>
-        </ContactsProvider>
+        <AuthProvider>
+          <ContactsProvider>
+            <Navbar />
+            <main style={{ padding: "20px" }}>{children}</main>
+          </ContactsProvider>
+        </AuthProvider>
       </body>
     </html>
   );

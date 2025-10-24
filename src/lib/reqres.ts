@@ -1,9 +1,11 @@
 export type ReqresUser = {
   id: number;
   email: string;
-  first_name: string;
-  last_name: string;
-  avatar: string;
+  first_name?: string;
+  last_name?: string;
+  avatar?: string;
+  name?: string;
+  favorite?: boolean;
 };
 
 export async function fetchAllReqresUsers(): Promise<ReqresUser[]> {

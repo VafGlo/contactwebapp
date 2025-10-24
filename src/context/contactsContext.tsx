@@ -10,6 +10,7 @@ import React, {
 import { fetchAllReqresUsers } from "../lib/reqres";
 import type { ReqresUser } from "../lib/reqres";
 import type { Contact as ContactType } from "../data/contacts";
+import { useAuth } from "./authContext";
 
 // Definición del tipo de contacto
 export type Contact = {
@@ -30,6 +31,9 @@ type ContactsContextType = {
   reloadFromApi: () => Promise<void>;
 };
 
+// helper para key en localStorage
+const storageKeyFor = (userId: string) => `contacts:${userId}`;
+
 // Crear contexto
 const ContactsContext = createContext<ContactsContextType | undefined>(
   undefined
@@ -44,30 +48,78 @@ export const useContacts = () => {
 
 // Proveedor de contactos -> lo coge de data
 export const ContactsProvider = ({ children }: { children: ReactNode }) => {
+  const { user } = useAuth(); // <-- obtener user
   const [contacts, setContacts] = useState<ContactType[]>([]);
 
   // Cargar datos desde reqres al montar
   useEffect(() => {
     let mounted = true;
     (async () => {
+      // Si hay usuario, cargar desde localStorage (persistencia por cuenta) o fallback a la API
+      if (user) {
+        try {
+          const raw = localStorage.getItem(storageKeyFor(user.id));
+          if (raw) {
+            const saved = JSON.parse(raw) as ContactType[];
+            if (mounted) {
+              setContacts(saved);
+              return;
+            }
+          }
+        } catch {
+          // ignore
+        }
+
+        try {
+          const users: ReqresUser[] = await fetchAllReqresUsers();
+          if (!mounted) return;
+          const mapped = users.map((u) => {
+            const first = (u.first_name ?? "").toString().trim();
+            const last = (u.last_name ?? "").toString().trim();
+            const nameFromParts = [first, last].filter(Boolean).join(" ");
+            const name = (u.name && u.name.toString().trim()) || nameFromParts || u.email || "";
+            return {
+              id: u.id,
+              name,
+              email: u.email,
+              favorite: !!u.favorite,
+            } as ContactType;
+          });
+          setContacts(mapped);
+        } catch (err) {
+          console.error("Error cargando desde reqres:", err);
+          setContacts([]);
+        }
+        return;
+      }
+
+      // Si NO hay usuario: cargar contactos públicos desde la API (no persistir)
       try {
         const users: ReqresUser[] = await fetchAllReqresUsers();
         if (!mounted) return;
-        const mapped = users.map((u) => ({
-          id: u.id,
-          name: `${u.first_name} ${u.last_name}`,
-          email: u.email,
-          favorite: false,
-        }));
+        const mapped = users.map((u) => {
+          const first = (u.first_name ?? "").toString().trim();
+          const last = (u.last_name ?? "").toString().trim();
+          const nameFromParts = [first, last].filter(Boolean).join(" ");
+          const name = (u.name && u.name.toString().trim()) || nameFromParts || u.email || "";
+          return {
+            id: u.id,
+            name,
+            email: u.email,
+            favorite: !!u.favorite,
+          } as ContactType;
+        });
         setContacts(mapped);
       } catch (err) {
-        console.error("Error cargando usuarios desde reqres:", err);
+        console.error("Error cargando desde reqres (public):", err);
+        setContacts([]);
       }
     })();
+
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [user]);
 
   // Marcar contacto como favorito
   const addFavorite = (id: number) =>
@@ -95,7 +147,7 @@ export const ContactsProvider = ({ children }: { children: ReactNode }) => {
       const users = await fetchAllReqresUsers();
       const mapped = users.map((u) => ({
         id: u.id,
-        name: `${u.first_name} ${u.last_name}`,
+        name: `${u.first_name ?? ""} ${u.last_name ?? ""}`.trim() || u.name || u.email,
         email: u.email,
         favorite: false,
       }));
@@ -114,7 +166,6 @@ export const ContactsProvider = ({ children }: { children: ReactNode }) => {
     </ContactsContext.Provider>
   );
 };
-
 
 
 

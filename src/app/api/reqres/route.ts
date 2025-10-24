@@ -1,106 +1,144 @@
-export async function GET() {
-  const fetchPageDirect = async (page: number) => {
-    const url = `https://reqres.in/api/users?page=${page}`;
-    try {
-      const res = await fetch(url, {
-        headers: {
-          Accept: "application/json",
-          // forzar origin/user-agent para evitar que algún gateway bloquee
-          Origin: "http://localhost:5173",
-          "User-Agent": "contactwebapp/1.0 (+https://localhost)",
-        },
-      });
-      const text = await res.text().catch(() => "");
-      if (!res.ok) {
-        return { ok: false, status: res.status, body: text };
-      }
-      return { ok: true, data: JSON.parse(text) };
-    } catch (err: any) {
-      return { ok: false, status: 0, body: String(err?.message ?? err) };
-    }
-  };
+import fs from "fs/promises";
+import path from "path";
 
-  const fetchPageViaAllOrigins = async (page: number) => {
-    const upstream = `https://reqres.in/api/users?page=${page}`;
-    const url = `https://api.allorigins.win/raw?url=${encodeURIComponent(upstream)}`;
-    try {
-      const res = await fetch(url, { headers: { Accept: "application/json" } });
-      const text = await res.text().catch(() => "");
-      if (!res.ok) return { ok: false, status: res.status, body: text };
-      return { ok: true, data: JSON.parse(text) };
-    } catch (err: any) {
-      return { ok: false, status: 0, body: String(err?.message ?? err) };
-    }
-  };
+type ReqresUser = {
+  id: number;
+  email: string;
+  first_name?: string;
+  last_name?: string;
+  name?: string;
+  avatar?: string;
+  favorite?: boolean;
+};
 
+const STORE_PATH = path.join(process.cwd(), "data", "contacts_store.json");
+
+async function fetchAllReqresUsersDirect(): Promise<ReqresUser[]> {
+  const url = `https://reqres.in/api/users?page=1`;
+  // obtener todas las páginas
+  const first = await fetch(`https://reqres.in/api/users?page=1`).then((r) => r.json());
+  const totalPages = first.total_pages ?? 1;
+  const users: ReqresUser[] = [...(first.data ?? [])];
+  for (let p = 2; p <= totalPages; p++) {
+    const page = await fetch(`https://reqres.in/api/users?page=${p}`).then((r) => r.json());
+    users.push(...(page.data ?? []));
+  }
+  // map a forma simple
+  return users.map((u: any) => {
+    const first = (u.first_name ?? "").toString().trim();
+    const last = (u.last_name ?? "").toString().trim();
+    const nameFromParts = [first, last].filter(Boolean).join(" ");
+    const name = (u.name && u.name.toString().trim()) || nameFromParts || u.email || "";
+    return {
+      id: u.id,
+      email: u.email,
+      first_name: first || undefined,
+      last_name: last || undefined,
+      name,
+      avatar: u.avatar,
+      favorite: false,
+    };
+  });
+}
+
+async function readStore(): Promise<ReqresUser[]> {
   try {
-    // intentar primero la llamada directa
-    const first = await fetchPageDirect(1);
-    if (!first.ok) {
-      // si upstream devuelve 401 con Missing API key, usar fallback
-      const bodyStr = String(first.body ?? "");
-      if (first.status === 401 || /Missing API key/i.test(bodyStr)) {
-        // intentar via allorigins
-        const f = await fetchPageViaAllOrigins(1);
-        if (!f.ok) {
-          return new Response(JSON.stringify({ error: "upstream_failed", via: "allorigins", status: f.status, body: f.body }), {
-            status: 502,
-            headers: { "Content-Type": "application/json" },
-          });
-        }
-        const totalPages = (f.data?.total_pages ?? 1) as number;
-        const users = [...(f.data?.data ?? [])];
+    const raw = await fs.readFile(STORE_PATH, "utf-8");
+    return JSON.parse(raw) as ReqresUser[];
+  } catch (e) {
+    return [];
+  }
+}
 
-        for (let p = 2; p <= totalPages; p++) {
-          const pageRes = await fetchPageViaAllOrigins(p);
-          if (!pageRes.ok) {
-            return new Response(JSON.stringify({ error: "upstream_failed", page: p, via: "allorigins", status: pageRes.status, body: pageRes.body }), {
-              status: 502,
-              headers: { "Content-Type": "application/json" },
-            });
-          }
-          users.push(...(pageRes.data?.data ?? []));
-        }
+async function writeStore(data: ReqresUser[]) {
+  await fs.mkdir(path.dirname(STORE_PATH), { recursive: true });
+  await fs.writeFile(STORE_PATH, JSON.stringify(data, null, 2), "utf-8");
+}
 
-        return new Response(JSON.stringify({ data: users }), { status: 200, headers: { "Content-Type": "application/json" } });
-      }
+async function ensureStoreInitialized() {
+  const current = await readStore();
+  if (current.length === 0) {
+    const users = await fetchAllReqresUsersDirect();
+    await writeStore(users);
+    return users;
+  }
+  return current;
+}
 
-      // si falla por otra razón, devolver info para depuración
-      return new Response(JSON.stringify({ error: "upstream_failed", status: first.status, body: first.body }), {
-        status: 502,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    // caso OK directo
-    const totalPages = (first.data?.total_pages ?? 1) as number;
-    const users = [...(first.data?.data ?? [])];
-
-    for (let p = 2; p <= totalPages; p++) {
-      const pageRes = await fetchPageDirect(p);
-      if (!pageRes.ok) {
-        // intentar fallback para páginas posteriores
-        const fallback = await fetchPageViaAllOrigins(p);
-        if (!fallback.ok) {
-          return new Response(JSON.stringify({ error: "upstream_failed", page: p, status: pageRes.status, body: pageRes.body }), {
-            status: 502,
-            headers: { "Content-Type": "application/json" },
-          });
-        }
-        users.push(...(fallback.data?.data ?? []));
-        continue;
-      }
-      users.push(...(pageRes.data?.data ?? []));
-    }
-
-    return new Response(JSON.stringify({ data: users }), {
-      status: 200,
-      headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
-    });
+export async function GET() {
+  try {
+    const data = await ensureStoreInitialized();
+    return new Response(JSON.stringify({ data }), { status: 200, headers: { "Content-Type": "application/json" } });
   } catch (err: any) {
-    return new Response(JSON.stringify({ error: "internal", message: String(err?.message ?? err) }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(JSON.stringify({ error: String(err?.message ?? err) }), { status: 500, headers: { "Content-Type": "application/json" } });
+  }
+}
+
+export async function POST(request: Request) {
+  // crear nuevo contacto: body { name, email, favorite? }
+  try {
+    const body = (await request.json()) as Partial<ReqresUser>;
+    if (!body?.name || !body?.email) {
+      return new Response(JSON.stringify({ error: "name and email required" }), { status: 400, headers: { "Content-Type": "application/json" } });
+    }
+    const store = await ensureStoreInitialized();
+    const newId = store.length > 0 ? Math.max(...store.map((s) => s.id)) + 1 : 1;
+    const created: ReqresUser = { id: newId, name: body.name, email: body.email, favorite: !!body.favorite, avatar: body.avatar ?? "" };
+    store.push(created);
+    await writeStore(store);
+    return new Response(JSON.stringify({ data: created }), { status: 201, headers: { "Content-Type": "application/json" } });
+  } catch (err: any) {
+    return new Response(JSON.stringify({ error: String(err?.message ?? err) }), { status: 500, headers: { "Content-Type": "application/json" } });
+  }
+}
+
+export async function PUT(request: Request) {
+  // actualizar contacto: body { id, name?, email?, favorite? }
+  try {
+    const body = (await request.json()) as Partial<ReqresUser> & { id?: number };
+    if (!body?.id) {
+      return new Response(JSON.stringify({ error: "id required" }), { status: 400, headers: { "Content-Type": "application/json" } });
+    }
+    const store = await ensureStoreInitialized();
+    const idx = store.findIndex((s) => s.id === body.id);
+    if (idx === -1) {
+      return new Response(JSON.stringify({ error: "not_found" }), { status: 404, headers: { "Content-Type": "application/json" } });
+    }
+    const updated = { ...store[idx], ...body };
+    store[idx] = updated;
+    await writeStore(store);
+    return new Response(JSON.stringify({ data: updated }), { status: 200, headers: { "Content-Type": "application/json" } });
+  } catch (err: any) {
+    return new Response(JSON.stringify({ error: String(err?.message ?? err) }), { status: 500, headers: { "Content-Type": "application/json" } });
+  }
+}
+
+export async function DELETE(request: Request) {
+  // borrar por query ?id=123 o body { id }
+  try {
+    const url = new URL(request.url);
+    const qid = url.searchParams.get("id");
+    let id: number | null = qid ? Number(qid) : null;
+    if (!id) {
+      try {
+        const body = (await request.json()) as { id?: number };
+        id = body?.id ?? null;
+      } catch {
+        id = null;
+      }
+    }
+    if (!id) {
+      return new Response(JSON.stringify({ error: "id required" }), { status: 400, headers: { "Content-Type": "application/json" } });
+    }
+    const store = await ensureStoreInitialized();
+    const idx = store.findIndex((s) => s.id === id);
+    if (idx === -1) {
+      return new Response(JSON.stringify({ error: "not_found" }), { status: 404, headers: { "Content-Type": "application/json" } });
+    }
+    const removed = store.splice(idx, 1)[0];
+    await writeStore(store);
+    return new Response(JSON.stringify({ data: removed }), { status: 200, headers: { "Content-Type": "application/json" } });
+  } catch (err: any) {
+    return new Response(JSON.stringify({ error: String(err?.message ?? err) }), { status: 500, headers: { "Content-Type": "application/json" } });
   }
 }

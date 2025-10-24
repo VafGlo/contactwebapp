@@ -1,0 +1,86 @@
+[
+  {
+    "id": 2,
+    "email": "janet.weaver@reqres.in",
+    "name": "Janet Weaver",
+    "avatar": "https://reqres.in/img/faces/2-image.jpg",
+    "favorite": false
+  },
+  {
+    "id": 3,
+    "email": "emma.wong@reqres.in",
+    "name": "Emma Wong",
+    "avatar": "https://reqres.in/img/faces/3-image.jpg",
+    "favorite": false
+  },
+  {
+    "id": 4,
+    "email": "eve.holt@reqres.in",
+    "name": "Eve Holt",
+    "avatar": "https://reqres.in/img/faces/4-image.jpg",
+    "favorite": false
+  },
+  {
+    "id": 5,
+    "email": "charles.morris@reqres.in",
+    "name": "Charles Morris",
+    "avatar": "https://reqres.in/img/faces/5-image.jpg",
+    "favorite": false
+  },
+  {
+    "id": 6,
+    "email": "tracey.ramos@reqres.in",
+    "name": "Tracey Ramos",
+    "avatar": "https://reqres.in/img/faces/6-image.jpg",
+    "favorite": false
+  },
+  {
+    "id": 7,
+    "email": "michael.lawson@reqres.in",
+    "name": "Michael Lawson",
+    "avatar": "https://reqres.in/img/faces/7-image.jpg",
+    "favorite": false
+  },
+  {
+    "id": 8,
+    "email": "lindsay.ferguson@reqres.in",
+    "name": "Lindsay Ferguson",
+    "avatar": "https://reqres.in/img/faces/8-image.jpg",
+    "favorite": false
+  },
+  {
+    "id": 9,
+    "email": "tobias.funke@reqres.in",
+    "name": "Tobias Funke",
+    "avatar": "https://reqres.in/img/faces/9-image.jpg",
+    "favorite": false
+  },
+  {
+    "id": 10,
+    "email": "byron.fields@reqres.in",
+    "name": "Byron Fields",
+    "avatar": "https://reqres.in/img/faces/10-image.jpg",
+    "favorite": false
+  },
+  {
+    "id": 11,
+    "email": "george.edwards@reqres.in",
+    "name": "George Edwards",
+    "avatar": "https://reqres.in/img/faces/11-image.jpg",
+    "favorite": false
+  },
+  {
+    "id": 12,
+    "email": "rachel.howell@reqres.in",
+    "name": "Rachel Howell",
+    "avatar": "https://reqres.in/img/faces/12-image.jpg",
+    "favorite": false
+  },
+  {
+    "id": 13,
+    "name": "Prueba",
+    "email": "prueba@example.com",
+    "favorite": false,
+    "avatar": ""
+  }
+]
