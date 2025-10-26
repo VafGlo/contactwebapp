@@ -11,14 +11,14 @@
     "email": "janet.weaver@reqres.in",
     "name": "Janet Weaver",
     "avatar": "https://reqres.in/img/faces/2-image.jpg",
-    "favorite": false
+    "favorite": true
   },
   {
     "id": 4,
     "email": "eve.holt@reqres.in",
     "name": "Eve Holt",
     "avatar": "https://reqres.in/img/faces/4-image.jpg",
-    "favorite": false
+    "favorite": true
   },
   {
     "id": 5,
@@ -32,7 +32,7 @@
     "email": "tracey.ramos@reqres.in",
     "name": "Tracey Ramos",
     "avatar": "https://reqres.in/img/faces/6-image.jpg",
-    "favorite": false
+    "favorite": true
   },
   {
     "id": 7,
@@ -75,5 +75,12 @@
     "name": "Rachel Howell",
     "avatar": "https://reqres.in/img/faces/12-image.jpg",
     "favorite": false
+  },
+  {
+    "id": 13,
+    "name": "Prueba",
+    "email": "prueba@example.com",
+    "favorite": false,
+    "avatar": ""
   }
 ]
