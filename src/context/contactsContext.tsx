@@ -7,14 +7,18 @@ import React, {
   useMemo,
   useState,
   ReactNode,
-} from "react";
+} 
+
+from "react";
 import { useAuth } from "@/context/authContext";
 import {
   IContactRepository,
   ApiContactRepository,
   LocalContactRepository,
   Contact as RepoContact,
-} from "@/services/contactRepository";
+} 
+
+from "@/services/contactRepository";
 
 // Definición del tipo de contacto (coincide con services/contactRepository)
 export type Contact = RepoContact;

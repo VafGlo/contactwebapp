@@ -75,12 +75,5 @@
     "name": "Rachel Howell",
     "avatar": "https://reqres.in/img/faces/12-image.jpg",
     "favorite": false
-  },
-  {
-    "id": 13,
-    "name": "Prueba",
-    "email": "prueba@example.com",
-    "favorite": false,
-    "avatar": ""
   }
 ]
