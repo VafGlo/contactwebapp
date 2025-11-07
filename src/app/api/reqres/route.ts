@@ -67,6 +67,7 @@ async function ensureStoreInitialized() {
 
 //CRUD
 
+//Estamos trayendo la info
 export async function GET() {
   try {
     const data = await ensureStoreInitialized();
