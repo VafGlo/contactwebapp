@@ -15,7 +15,7 @@ const STORE_PATH = path.join(process.cwd(), "data", "contacts_store.json");
 
 async function fetchAllReqresUsersDirect(): Promise<ReqresUser[]> {
   const url = `https://reqres.in/api/users?page=1`;
-  // obtener todas las páginas
+  // obtener las páginas
   const first = await fetch(`https://reqres.in/api/users?page=1`).then((r) => r.json());
   const totalPages = first.total_pages ?? 1;
   const users: ReqresUser[] = [...(first.data ?? [])];
@@ -64,6 +64,8 @@ async function ensureStoreInitialized() {
   }
   return current;
 }
+
+//CRUD
 
 export async function GET() {
   try {

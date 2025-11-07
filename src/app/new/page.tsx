@@ -58,7 +58,7 @@ export default function NewContactPage() {
     const created = addContact(newContactData);
 
     //Guardamos el id para mostrar la preview y permitir acciones
-    setCreatedId(created.id);
+    //setCreatedId(created.id);
 
     //Limpiar el formulario
     setFormData({
