@@ -1,19 +1,5 @@
 [
   {
-    "id": 1,
-    "email": "george.bluth@reqres.in",
-    "name": "Nombre Editado",
-    "avatar": "https://reqres.in/img/faces/1-image.jpg",
-    "favorite": false
-  },
-  {
-    "id": 2,
-    "email": "janet.weaver@reqres.in",
-    "name": "Janet Weaver",
-    "avatar": "https://reqres.in/img/faces/2-image.jpg",
-    "favorite": true
-  },
-  {
     "id": 4,
     "email": "eve.holt@reqres.in",
     "name": "Eve Holt",
@@ -60,7 +46,7 @@
     "email": "byron.fields@reqres.in",
     "name": "Byron Fields",
     "avatar": "https://reqres.in/img/faces/10-image.jpg",
-    "favorite": false
+    "favorite": true
   },
   {
     "id": 11,
@@ -81,6 +67,20 @@
     "name": "Prueba",
     "email": "prueba@example.com",
     "favorite": false,
+    "avatar": ""
+  },
+  {
+    "id": 14,
+    "name": "Valeria Alvarez",
+    "email": "valeria.alvarez01@globant.com",
+    "favorite": true,
+    "avatar": ""
+  },
+  {
+    "id": 15,
+    "name": "Batman  de la noche",
+    "email": "batman.delanocge@noche.com",
+    "favorite": true,
     "avatar": ""
   }
 ]
